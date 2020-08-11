@@ -1,6 +1,6 @@
-# Retry.lua
+# Retry.lua
 
-## About Retry
+## About Retry
 
 Retry is a utility for running scripts that requires network connections (such as, HTTPs, API, etc) when using Retry
 
@@ -10,7 +10,7 @@ until it has reached the RetryLimit (Default is 3)
 
 To avoid issues like too many requests, Retry will wait for an interval per retry.
 
-## So, why Retry
+## So, why Retry
 
 DataStoreService has a property called AutomaticRetry, which will automatically retry when failed. However,
 
@@ -22,7 +22,7 @@ I've created this module for beginners, since they might not know abo
 
 a system for retrying operation, rather than using this one, but it's all up to you.
 
-## Reference
+## Reference
 
 ```function Retry:Try(function Callback)```
 
