@@ -55,7 +55,7 @@ function module:Try(Callback)
 		wait(module.IntervalPerRetry)
 	end
 	if not Success then
-		error("An error occured when attempting to try :" .. tostring(Result))
+		error("An error occured when attempting to try : " .. tostring(Result))
 	else
 		return Success, Result
 	end
