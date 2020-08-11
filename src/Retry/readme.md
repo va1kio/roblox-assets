@@ -2,11 +2,7 @@
 
 ## About Retry
 
-Retry is a utility for running scripts that requires network connections (such as, HTTPs, API, etc) when using Retry
-
-Retry itself will attempt to try running the function which is wrapped in a pcall, and if it failed, it will keep retrying
-
-until it has reached the RetryLimit (Default is 3)
+Retry is a utility for running scripts that requires network connections (such as, HTTPs, API, etc) when using Retry, Retry itself will attempt to try running the function which is wrapped in a pcall, and if it failed, it will keep retrying, until it has reached the RetryLimit (Default is 3)
 
 To avoid issues like too many requests, Retry will wait for an interval per retry.
 
