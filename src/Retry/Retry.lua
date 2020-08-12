@@ -38,27 +38,84 @@
 	
 	REFERENCE:
 	
-	function Retry:Try(function Callback)
+	function Retry:Try(function Callback, int RetryLimit, number Interval)
 	// Start trying a function, and will retry if failed.
+	
+	function Retry:Create(function Callback, int RetryLimit, number Interval)
+	// Creates a RetryObject
+	
+	function RetryObject:Run()
+	// Runs the callback given, and will retry if failed, state will set to Running, Retrying, Aborted, Success depending on the siutation.
+	
+	function RetryObject:Stop()
+	// Stops operation and set State to Stopped.
+	
+	number RetryObject.Tries
+	// Tries
+	
+	string RetryObject.State
+	// The current state of RetryObject, can be Stopped, Running, Retrying, Aborted or Success.
+	
+	number RetryObject.RetryLimit
+	// Maximum retry limit, default is 3 if not given.
+	
+	int RetryObject.Interval
+	// Cooldown per retry, default is 5 if not given.
+	
+	function RetryObject.Callback
+	// Callback used for RetryObject:Run()
 --]]
 
 local module = {}
 module.RetryLimit = 3 -- Retry limit, setting to math.huge will yield the script, and is not recommended, the maximum should be 10.
 module.IntervalPerRetry = 5 -- Cooldown per retry, I highly don't recommend setting this to 0, this can potentially crash your instance, as the while loop below
 
-function module:Try(Callback)
+function module:Try(Callback, RetryLimit, Interval)
 	local Tries = 1
 	local Success, Result = pcall(Callback)
-	while not Success and Tries <= module.RetryLimit do
+	while not Success and Tries <= (RetryLimit or module.RetryLimit) do
 		Success, Result = pcall(Callback)
 		Tries += 1
-		wait(module.IntervalPerRetry)
+		wait(Interval or module.IntervalPerRetry)
 	end
 	if not Success then
 		error("An error occured when attempting to try : " .. tostring(Result))
 	else
 		return Success, Result
 	end
+end
+
+function module:Create(Callback, RetryLimit, Interval)
+	local Table = {}
+	Table.Tries = 1
+	Table.State = "Stopped"
+	Table.RetryLimit = RetryLimit or module.RetryLimit
+	Table.Interval = Interval or module.IntervalPerRetry
+	Table.Callback = Callback
+	
+	function Table:Run()
+		Table.State = "Running"
+		local Status, Result = pcall(Table.Callback)
+		while not Status and Table.Tries <= Table.RetryLimit and Table.State == "Running" do
+			Table.State = "Retrying"
+			Status, Result = pcall(Table.Callback)
+			Table.Tries += 1
+			wait(Table.Interval)
+		end
+		
+		if not Status then
+			Table.State = "Aborted"
+		else
+			Table.State = "Success"
+			Table.Result = {Result}
+		end
+	end
+	
+	function Table:Stop()
+		Table.State = "Stopped"
+	end
+	
+	return Table
 end
 
 return module
