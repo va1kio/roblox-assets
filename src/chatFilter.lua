@@ -13,7 +13,7 @@ local sensitiveWords = {
 }
 
 function module.process(client, object, channel)
-	local message = object.Message:lower()
+	local message = string.lower(string.gsub(object.Message, "‍", ""))
 	local sensitiveWordsFound = false
 	client = Players:FindFirstChild(client)
 	
