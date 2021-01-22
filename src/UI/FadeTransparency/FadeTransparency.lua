@@ -27,7 +27,7 @@ local function GetProperty(Object)
 end
 
 function module.FadeIn(Object, FadeTime)
-	local TI = TweenInfo.new(FadeTime, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+	local TI = TweenInfo.new(FadeTime, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 	local Table = Object:GetDescendants()
 	Table[#Table + 1] = Object
 	for i,v in pairs(Table) do
@@ -53,7 +53,7 @@ function module.FadeIn(Object, FadeTime)
 end
 
 function module.FadeOut(Object, FadeTime)
-	local TI = TweenInfo.new(FadeTime, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+	local TI = TweenInfo.new(FadeTime, Enum.EasingStyle.Linear, Enum.EasingDirection.Out)
 	local Table = Object:GetDescendants()
 	Table[#Table + 1] = Object
 	for i,v in pairs(Table) do
